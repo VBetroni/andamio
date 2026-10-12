@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="ANDAMIO — Estrategia, articulación, gestión y tecnología. Radar ANDAMIO y herramientas de diagnóstico."/>
+<title>ANDAMIO — Estrategia, articulación, gestión y tecnología</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='15 17 60 66'%3E%3Crect x='11' y='13' width='68' height='74' rx='14' fill='%23F3F0E6'/%3E%3Cg fill='%231E2B42'%3E%3Crect x='20' y='22' width='5' height='56'/%3E%3Crect x='45' y='22' width='5' height='56'/%3E%3Crect x='60' y='22' width='5' height='56'/%3E%3Crect x='20' y='22' width='20' height='5'/%3E%3Crect x='20' y='43' width='50' height='5'/%3E%3Crect x='20' y='58' width='50' height='5'/%3E%3Crect x='50' y='22' width='20' height='5'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+:root{
+  --cream:#F3F0E6;
+  --paper:#FAF8F1;
+  --forest:#273039;
+  --forest2:#33414C;
+  --sage:#A7B8C5;
+  --sage-soft:#DCE4EA;
+  --ink:#273039;
+  --muted:#66707B;
+  --line:rgba(39,48,57,.16);
+  --navy:#1E2B42;
+  --navy-deep:#16202A;
+  --max:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--cream);color:var(--ink);
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.5
+}
+a{text-decoration:none;color:inherit}
+button{font:inherit}
+.wrap{width:min(calc(100% - 40px),var(--max));margin:auto}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.76rem;font-weight:850;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--forest)
+}
+.eyebrow:before{content:"";width:28px;height:2px;background:currentColor}
+h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif;font-weight:500}
+h1{font-size:clamp(3.6rem,7vw,6.8rem);line-height:.92;letter-spacing:-.055em;margin:18px 0 24px}
+h2{font-size:clamp(2.6rem,5vw,5rem);line-height:.98;letter-spacing:-.045em;margin:14px 0}
+h3{font-size:2rem;line-height:1.08}
+p.lead{font-size:1.2rem;color:#3e4944;max-width:760px}
+section{padding:92px 0}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:13px 20px;border-radius:999px;border:1px solid var(--forest);
+  font-weight:850;cursor:pointer;transition:.2s ease
+}
+.btn.primary{background:var(--forest);color:var(--paper)}
+.btn:hover{background:#fff !important;color:var(--navy) !important;border-color:var(--navy);transform:translateY(-2px)}
+
+header{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(14px);
+  background:rgba(243,240,230,.9);
+  border-bottom:1px solid rgba(39,48,57,.08);
+  transition:box-shadow .25s ease
+}
+header.scrolled{box-shadow:0 6px 22px rgba(39,48,57,.14)}
+nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:.08em;color:var(--forest)}
+.brand-icon{width:32px;height:auto;flex:none;display:block}
+.navlinks{display:flex;gap:20px;align-items:center;font-size:.92rem;font-weight:700}
+.navlinks a:not(.btn){padding:8px 14px;border-radius:999px;transition:.2s ease}
+.navlinks a:not(.btn):hover{background:#fff;color:var(--navy)}
+
+.hero{
+  min-height:720px;display:flex;align-items:center;position:relative;overflow:hidden
+}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+.hero-visual{
+  min-height:510px;border-radius:34px;background:var(--forest);
+  position:relative;overflow:hidden
+}
+.visual-pattern{
+  position:absolute;inset:32px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='92' height='92' viewBox='0 0 92 92'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='1.4'%3E%3Crect x='21' y='23' width='5' height='56'/%3E%3Crect x='46' y='23' width='5' height='56'/%3E%3Crect x='61' y='23' width='5' height='56'/%3E%3Crect x='21' y='23' width='20' height='5'/%3E%3Crect x='51' y='23' width='20' height='5'/%3E%3Crect x='21' y='44' width='50' height='5'/%3E%3Crect x='21' y='59' width='50' height='5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:92px 92px
+}
+.visual-scrim{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(39,48,57,.94) 0%,rgba(39,48,57,.82) 36%,rgba(39,48,57,.3) 66%,rgba(39,48,57,0) 86%)
+}
+.visual-copy{
+  position:absolute;left:54px;right:54px;bottom:50px;color:var(--paper);
+  text-shadow:0 2px 16px rgba(39,48,57,.4)
+}
+.visual-copy small{text-transform:uppercase;letter-spacing:.14em;font-weight:850;opacity:.7}
+.visual-copy strong{display:block;font-family:Georgia,serif;font-size:3rem;line-height:1.03;margin-top:10px;font-weight:500}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+
+.statement{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.statement-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:70px;align-items:end}
+.bigline{font-family:Georgia,serif;font-size:clamp(3rem,6vw,6rem);line-height:.96;letter-spacing:-.05em;color:var(--forest)}
+.copy-lg{font-size:1.16rem;color:#3e4944}
+
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{
+  background:var(--paper);border:1px solid var(--line);border-radius:26px;padding:30px;
+  min-height:420px;display:flex;flex-direction:column
+}
+.num{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--sage);font-weight:900;color:var(--forest)}
+.card h3{margin:14px 0 10px;min-height:2.16em}
+.card p{color:var(--muted)}
+.card ul{list-style:none;padding:0;margin:auto 0 0;border-top:1px solid var(--line)}
+.card li{padding:11px 0;border-bottom:1px solid var(--line);font-size:.92rem;font-weight:700}
+
+.dark{background:var(--forest);color:var(--paper)}
+.dark .eyebrow{color:var(--sage)}
+.dark p{color:rgba(250,248,241,.72)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.2);border-bottom:1px solid rgba(255,255,255,.2)}
+.step{padding:28px 22px;border-right:1px solid rgba(255,255,255,.2);min-height:215px}
+.step:last-child{border-right:0}
+.step-pill{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:8px 20px;border-radius:999px;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.35);
+  color:var(--sage);font-weight:900;letter-spacing:.1em;font-size:.8rem;
+  text-transform:uppercase
+}
+.step strong{display:block;font-size:1.35rem;margin-top:30px}
+.step p{font-size:.94rem}
+
+.tech-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:30px}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}
+.flow span{background:var(--sage-soft);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;font-weight:800;font-size:.84rem}
+.techlist{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.techitem{padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.45);font-weight:700}
+
+.namebox{background:var(--sage);border-radius:34px;padding:54px;display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:center}
+.mini-andamio{
+  height:240px;position:relative;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='rgba(39,48,57,0.55)' stroke-width='1.6'%3E%3Crect x='19' y='21' width='5' height='56'/%3E%3Crect x='42' y='21' width='5' height='56'/%3E%3Crect x='55' y='21' width='5' height='56'/%3E%3Crect x='19' y='21' width='20' height='5'/%3E%3Crect x='46' y='21' width='20' height='5'/%3E%3Crect x='19' y='42' width='45' height='5'/%3E%3Crect x='19' y='57' width='45' height='5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:84px 84px
+}
+
+.radar-intro{background:var(--paper);border-top:1px solid var(--line)}
+.radar-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:end}
+.radar-note{background:var(--forest);color:var(--paper);padding:30px;border-radius:26px}
+.radar-note small{text-transform:uppercase;letter-spacing:.12em;font-weight:850;color:var(--sage)}
+.radar-note strong{display:block;font-family:Georgia,serif;font-size:2.2rem;line-height:1.08}
+.latest-card{display:grid;grid-template-columns:.9fr 1.1fr;border:1px solid var(--line);border-radius:28px;overflow:hidden;background:var(--cream)}
+.issue-cover{background:var(--sage);padding:34px;min-height:420px;display:flex;flex-direction:column;justify-content:space-between}
+.issue-cover .title{font-family:Georgia,serif;font-size:5rem;line-height:.95;letter-spacing:-.05em;color:var(--forest)}
+.issue-copy{padding:36px}
+.issue-copy p{color:var(--muted)}
+.issue-copy ul{padding-left:18px}
+
+.tool-section{background:#ECE9DA}
+.quiz{max-width:900px}
+.qbox{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:26px;margin:16px 0}
+.qnum{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--sage);font-weight:900;color:var(--forest)}
+.qbox h3{margin:14px 0 10px}
+.options{display:grid;gap:9px}
+.option{display:flex;gap:10px;align-items:flex-start;padding:13px 14px;background:white;border:1px solid var(--line);border-radius:12px}
+.result{background:var(--forest);color:var(--paper);border-radius:24px;padding:28px;margin-top:26px}
+.result p{color:rgba(250,248,241,.72)}
+#score{margin-top:16px;font-size:1.08rem}
+
+.article{max-width:860px;margin:auto}
+.article h2{font-size:2.1rem;margin-top:46px}
+.article .signal{border-left:4px solid var(--sage);padding:18px 22px;background:var(--paper);border-radius:12px;margin:22px 0}
+.article-meta{color:var(--muted);font-size:.9rem}
+
+.contact{background:var(--navy);color:var(--paper)}
+.contact p{color:rgba(250,248,241,.7)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:54px;align-items:start}
+.contact-list{display:grid;gap:12px;font-weight:800}
+.contact form{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:34px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:26px}
+.contact input,.contact select,.contact textarea{background:transparent;border:0;border-bottom:1px solid rgba(250,248,241,.35);padding:13px 4px;font:inherit;color:var(--paper);width:100%}
+.contact input::placeholder,.contact textarea::placeholder{color:rgba(250,248,241,.5)}
+.contact select{color:var(--paper)}
+.contact select option{color:var(--ink)}
+.contact textarea{grid-column:1/-1;min-height:120px;resize:vertical}
+.contact form button{grid-column:1/-1;justify-self:start;border:1px solid transparent;background:var(--sage);color:var(--navy);padding:14px 26px;border-radius:999px;font-weight:850;cursor:pointer;transition:.2s ease}
+.contact form button:hover{background:#fff;color:var(--navy);transform:translateY(-2px)}
+
+.mail-choice-overlay{position:fixed;inset:0;z-index:100;background:rgba(30,43,66,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+.mail-choice-overlay[hidden]{display:none}
+.mail-choice-box{position:relative;background:var(--cream);max-width:380px;width:100%;padding:34px 30px;border:1px solid var(--navy);border-radius:22px;text-align:center}
+.mail-choice-box p{margin:0 0 20px;font-family:Georgia,"Times New Roman",serif;font-size:1.25rem;color:var(--ink)}
+.mail-choice-box .btn{width:100%;text-align:center;margin-bottom:12px}
+.mail-choice-box .btn:last-of-type{margin-bottom:0}
+.mail-choice-close{position:absolute;top:12px;right:12px;border:0;background:transparent;font-size:1.4rem;line-height:1;cursor:pointer;color:var(--ink);padding:6px}
+
+footer{background:var(--navy-deep);color:rgba(250,248,241,.55);padding:24px 0;font-size:.84rem}
+
+@media(max-width:900px){
+  .navlinks a:not(.btn){display:none}
+  .hero-grid,.statement-grid,.tech-grid,.namebox,.radar-hero,.latest-card,.contact-grid{grid-template-columns:1fr}
+  .cards3{grid-template-columns:1fr}
+  .card{min-height:0}
+  .card h3{min-height:0}
+  .steps{grid-template-columns:1fr 1fr}
+  .flow{grid-template-columns:1fr 1fr}
+  .techlist{grid-template-columns:1fr 1fr}
+  .namebox{padding:40px}
+  .mini-andamio{height:180px}
+  .issue-cover{min-height:auto}
+  .issue-cover .title{font-size:4rem}
+  section{padding:76px 0}
+}
+@media(max-width:620px){
+  .wrap{width:min(calc(100% - 26px),var(--max))}
+  section{padding:64px 0}
+  h1{font-size:3.2rem}
+  h2{font-size:2.2rem}
+  h3{font-size:1.5rem}
+  .hero{min-height:auto}
+  .hero-visual{min-height:400px}
+  .visual-copy{left:26px;right:26px;bottom:28px}
+  .visual-copy strong{font-size:1.9rem}
+  .bigline{font-size:2.4rem}
+  .steps{grid-template-columns:1fr}
+  .step{border-right:0;border-bottom:1px solid rgba(255,255,255,.2)}
+  .flow{grid-template-columns:1fr 1fr}
+  .techlist{grid-template-columns:1fr}
+  .namebox{padding:26px;border-radius:24px}
+  .mini-andamio{height:150px}
+  .card{padding:24px;min-height:0}
+  .panel{padding:22px}
+  .radar-note{padding:22px}
+  .radar-note strong{font-size:1.7rem}
+  .issue-cover{padding:24px}
+  .issue-cover .title{font-size:2.8rem}
+  .issue-copy{padding:26px}
+  .qbox{padding:20px}
+  .contact form{grid-template-columns:1fr;padding:24px}
+  .contact-grid{gap:34px}
+  .navlinks{gap:12px}
+  .brand span{font-size:.9rem}
+}
+@media(max-width:420px){
+  h1{font-size:2.5rem}
+  h2{font-size:1.9rem}
+  .visual-copy strong{font-size:1.5rem}
+  .bigline{font-size:1.9rem}
+  .flow{grid-template-columns:1fr}
+  .btn{padding:12px 16px;font-size:.9rem}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .issue-cover .title{font-size:2.2rem}
+  .step-pill{font-size:.72rem;padding:7px 16px}
+}
+</style>
+</head>
+<body>
+
+<header id="topheader">
+<div class="wrap">
+<nav>
+  <a class="brand" href="#inicio">
+    <svg class="brand-icon" viewBox="15 17 60 66" role="img" aria-label="ANDAMIO" focusable="false">
+      <g fill="#1E2B42">
+        <rect x="20" y="22" width="5" height="56"></rect>
+        <rect x="45" y="22" width="5" height="56"></rect>
+        <rect x="60" y="22" width="5" height="56"></rect>
+        <rect x="20" y="22" width="20" height="5"></rect>
+        <rect x="20" y="43" width="50" height="5"></rect>
+        <rect x="20" y="58" width="50" height="5"></rect>
+        <rect x="50" y="22" width="20" height="5"></rect>
+      </g>
+    </svg>
+    <span>ANDAMIO</span>
+  </a>
+  <div class="navlinks">
+    <a href="#que-hacemos">Qué hacemos</a>
+    <a href="#tecnologia">Tecnología</a>
+    <a href="#radar">Radar</a>
+    <a href="#herramienta">Herramienta</a>
+    <a class="btn primary" href="#contacto">Hablemos</a>
+  </div>
+</nav>
+</div>
+</header>
+
+<main id="inicio">
+
+<section class="hero">
+<div class="wrap hero-grid">
+  <div>
+    <span class="eyebrow">Estrategia · articulación · gestión · tecnología</span>
+    <h1>Transformamos decisiones en <span style="color:var(--forest)">resultados.</span></h1>
+    <p class="lead">Acompañamos a gobiernos, empresas y organizaciones a ordenar desafíos complejos, alinear actores e implementar soluciones, combinando estrategia, gestión y tecnología.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#que-hacemos">Conocé cómo trabajamos</a>
+      <a class="btn ghost" href="#contacto">Contanos tu desafío</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="visual-pattern"></div>
+    <div class="visual-scrim"></div>
+    <div class="visual-copy">
+      <strong>No alcanza con tener una buena estrategia. Hay que hacerla posible.</strong>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="statement">
+<div class="wrap statement-grid">
+  <div>
+    <span class="eyebrow">De dónde partimos</span>
+    <div class="bigline">Las ideas existen.<br>Lo difícil es hacerlas suceder.</div>
+  </div>
+  <div class="copy-lg">
+    <p>Los desafíos actuales atraviesan áreas, sectores e intereses distintos. Requieren más que diagnóstico: necesitan dirección, articulación y capacidad de ejecución.</p>
+    <p>ANDAMIO construye las condiciones para que una decisión pueda convertirse en un proyecto, un proyecto en una implementación y una implementación en resultados.</p>
+  </div>
+</div>
+</section>
+
+<section id="que-hacemos">
+<div class="wrap">
+  <span class="eyebrow">Qué hacemos</span>
+  <h2>Tres capacidades para mover proyectos complejos.</h2>
+  <p class="lead">No vendemos soluciones aisladas. Combinamos estrategia, articulación e implementación según el desafío de cada organización.</p>
+
+  <div class="cards3" style="margin-top:40px">
+    <article class="card">
+      <span class="num">01</span>
+      <h3>Diseñamos dirección.</h3>
+      <p>Ayudamos a comprender el contexto, definir prioridades y convertir problemas difusos en decisiones claras.</p>
+      <ul>
+        <li>Diagnóstico estratégico e institucional</li>
+        <li>Diseño de estrategia y hojas de ruta</li>
+        <li>Asuntos públicos y posicionamiento</li>
+        <li>Modelos de gestión y priorización</li>
+      </ul>
+    </article>
+    <article class="card">
+      <span class="num">02</span>
+      <h3>Articulamos capacidades.</h3>
+      <p>Conectamos personas, áreas e instituciones para construir acuerdos y generar capacidad de acción compartida.</p>
+      <ul>
+        <li>Mapeo y estrategia de stakeholders</li>
+        <li>Relaciones institucionales</li>
+        <li>Articulación público-privada</li>
+        <li>Alianzas y construcción de consensos</li>
+      </ul>
+    </article>
+    <article class="card">
+      <span class="num">03</span>
+      <h3>Hacemos que suceda.</h3>
+      <p>Acompañamos la implementación, rediseñando procesos e incorporando tecnología cuando permite gestionar mejor.</p>
+      <ul>
+        <li>Gestión e implementación de proyectos</li>
+        <li>Rediseño y simplificación de procesos</li>
+        <li>Transformación digital</li>
+        <li>Datos, automatización e IA aplicada</li>
+      </ul>
+    </article>
+  </div>
+</div>
+</section>
+
+<section class="dark">
+<div class="wrap">
+  <span class="eyebrow">Método ANDAMIO</span>
+  <h2>Pensar. Conectar. Activar. Fortalecer.</h2>
+  <p class="lead">Trabajamos desde el problema hasta la capacidad instalada, acompañando tanto la decisión como su ejecución.</p>
+  <div class="steps" style="margin-top:38px">
+    <div class="step"><span class="step-pill">Pensar</span><strong>Entender antes de actuar.</strong><p>Leemos contexto, restricciones, oportunidades y prioridades.</p></div>
+    <div class="step"><span class="step-pill">Conectar</span><strong>Alinear actores.</strong><p>Mapeamos intereses, construimos acuerdos y ordenamos responsabilidades.</p></div>
+    <div class="step"><span class="step-pill">Activar</span><strong>Pasar a la acción.</strong><p>Diseñamos la hoja de ruta, coordinamos tareas y acompañamos la implementación.</p></div>
+    <div class="step"><span class="step-pill">Fortalecer</span><strong>Dejar capacidad.</strong><p>Mejoramos procesos, equipos y herramientas para sostener el cambio.</p></div>
+  </div>
+</div>
+</section>
+
+<section id="tecnologia">
+<div class="wrap tech-grid">
+  <div>
+    <span class="eyebrow">Tecnología aplicada</span>
+    <h2>Tecnología para gestionar mejor.</h2>
+    <p class="lead">No creemos en digitalizar por digitalizar. La tecnología genera valor cuando resuelve un problema real, mejora un proceso o permite tomar mejores decisiones.</p>
+    <div class="techlist">
+      <div class="techitem">Transformación digital</div>
+      <div class="techitem">Datos y tableros de gestión</div>
+      <div class="techitem">Automatización de procesos</div>
+      <div class="techitem">Inteligencia artificial aplicada</div>
+      <div class="techitem">Diseño de herramientas digitales</div>
+      <div class="techitem">Adopción y gestión del cambio</div>
+    </div>
+  </div>
+  <div class="panel">
+    <span class="eyebrow">Nuestra lógica</span>
+    <div class="flow">
+      <span>Problema</span><span>Proceso</span><span>Tecnología</span><span>Resultado</span>
+    </div>
+    <p class="serif" style="font-size:1.55rem;color:var(--forest);margin-top:26px">La transformación digital no empieza por la herramienta. Empieza por entender qué queremos mejorar.</p>
+    <p style="color:var(--muted)">Primero ordenamos el problema y el proceso. Después definimos qué datos, automatizaciones, herramientas o soluciones de IA realmente tienen sentido incorporar.</p>
+  </div>
+</div>
+</section>
+
+<section>
+<div class="wrap namebox">
+  <div class="mini-andamio"></div>
+  <div>
+    <span class="eyebrow">Por qué ANDAMIO</span>
+    <h2>No somos la obra. Ayudamos a construirla.</h2>
+    <p class="copy-lg">Un andamio sostiene, conecta y permite avanzar. Esa es nuestra forma de trabajar: construir capacidades, articular actores y acompañar la implementación para que los proyectos sean más sólidos y puedan sostenerse más allá de nuestra intervención.</p>
+  </div>
+</div>
+</section>
+
+<section id="radar" class="radar-intro">
+<div class="wrap">
+  <div class="radar-hero">
+    <div>
+      <span class="eyebrow">Radar ANDAMIO</span>
+      <h2>Señales para decidir mejor.</h2>
+      <p class="lead">Un análisis breve sobre tendencias, cambios y desafíos que impactan en la gestión de gobiernos, empresas y organizaciones.</p>
+    </div>
+    <div class="radar-note">
+      <small>Nuestra lógica</small>
+      <strong>Menos ruido. Más criterio para entender qué está cambiando y qué hacer con eso.</strong>
+    </div>
+  </div>
+
+  <div style="margin-top:50px" class="latest-card">
+    <div class="issue-cover">
+      <div style="font-size:.78rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--forest)">Agosto 2026 · Inteligencia artificial</div>
+      <div class="title">IA sin humo.</div>
+      <div style="font-weight:900;color:var(--forest)">RADAR / 01</div>
+    </div>
+    <div class="issue-copy">
+      <h3>No todo lo que puede automatizarse debería automatizarse.</h3>
+      <p>La IA funciona especialmente bien cuando existen datos suficientes, objetivos claros y decisiones estructuradas. Pero muchos problemas relevantes ocurren justamente donde hay incertidumbre, intereses contrapuestos y ambigüedad.</p>
+      <ul>
+        <li>Cómo detectar oportunidades reales para aplicar IA.</li>
+        <li>Qué procesos conviene revisar antes de automatizar.</li>
+        <li>Qué decisiones deberían seguir siendo humanas.</li>
+      </ul>
+      <a class="btn primary" href="#radar01">Leer Radar #01</a>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="herramienta" class="tool-section">
+<div class="wrap quiz">
+  <span class="eyebrow">Herramienta ANDAMIO</span>
+  <h2>5 preguntas para diagnosticar tu organización.</h2>
+  <p class="lead">Elegí la opción que mejor describa la situación actual. El objetivo no es “aprobar”, sino detectar dónde conviene intervenir primero.</p>
+
+  <div class="qbox">
+    <span class="qnum">1</span>
+    <h3>¿Tenemos claro qué problema estamos tratando de resolver?</h3>
+    <div class="options">
+      <label class="option"><input type="radio" name="q1" value="0"> No. Hay muchas prioridades y cada área lo interpreta distinto.</label>
+      <label class="option"><input type="radio" name="q1" value="1"> Parcialmente. Hay una idea general, pero falta foco.</label>
+      <label class="option"><input type="radio" name="q1" value="2"> Sí. El problema, la prioridad y el resultado esperado están claros.</label>
+    </div>
+  </div>
+
+  <div class="qbox">
+    <span class="qnum">2</span>
+    <h3>¿Los actores que necesitamos están alineados?</h3>
+    <div class="options">
+      <label class="option"><input type="radio" name="q2" value="0"> No. Hay áreas, intereses o instituciones trabajando por separado.</label>
+      <label class="option"><input type="radio" name="q2" value="1"> En parte. Existen vínculos, pero la coordinación depende de personas puntuales.</label>
+      <label class="option"><input type="radio" name="q2" value="2"> Sí. Roles, acuerdos y responsabilidades están definidos.</label>
+    </div>
+  </div>
+
+  <div class="qbox">
+    <span class="qnum">3</span>
+    <h3>¿La estrategia se traduce en una hoja de ruta ejecutable?</h3>
+    <div class="options">
+      <label class="option"><input type="radio" name="q3" value="0"> No. Tenemos ideas, documentos o reuniones, pero poca ejecución.</label>
+      <label class="option"><input type="radio" name="q3" value="1"> Parcialmente. Hay proyectos en marcha, pero cuesta priorizar y hacer seguimiento.</label>
+      <label class="option"><input type="radio" name="q3" value="2"> Sí. Hay responsables, plazos, hitos y mecanismos de seguimiento.</label>
+    </div>
+  </div>
+
+  <div class="qbox">
+    <span class="qnum">4</span>
+    <h3>¿La tecnología mejora realmente la gestión?</h3>
+    <div class="options">
+      <label class="option"><input type="radio" name="q4" value="0"> No. Tenemos herramientas aisladas o procesos digitalizados que siguen siendo ineficientes.</label>
+      <label class="option"><input type="radio" name="q4" value="1"> En parte. Usamos datos o herramientas digitales, pero sin una lógica integrada.</label>
+      <label class="option"><input type="radio" name="q4" value="2"> Sí. Datos, automatización y tecnología están conectados con problemas concretos.</label>
+    </div>
+  </div>
+
+  <div class="qbox">
+    <span class="qnum">5</span>
+    <h3>¿La organización aprende y sostiene las mejoras?</h3>
+    <div class="options">
+      <label class="option"><input type="radio" name="q5" value="0"> No. Los cambios dependen de personas y se pierden cuando cambia el equipo.</label>
+      <label class="option"><input type="radio" name="q5" value="1"> A veces. Existen buenas prácticas, pero no siempre quedan institucionalizadas.</label>
+      <label class="option"><input type="radio" name="q5" value="2"> Sí. Los procesos, herramientas y aprendizajes quedan instalados.</label>
+    </div>
+  </div>
+
+  <div class="result">
+    <h3>Tu diagnóstico</h3>
+    <p>Respondé las cinco preguntas y obtené una lectura rápida de tu capacidad de acción.</p>
+    <button class="btn" style="background:var(--sage);color:var(--forest);border-color:var(--sage)" onclick="calcular()">Ver resultado</button>
+    <div id="score"></div>
+  </div>
+</div>
+</section>
+
+<section id="radar01">
+<div class="wrap article">
+  <span class="eyebrow">Radar / 01</span>
+  <h1 style="font-size:clamp(3.8rem,7vw,6.5rem)">IA sin humo.</h1>
+  <p class="lead">Dónde puede generar valor real en una organización — y dónde conviene no empezar.</p>
+  <p class="article-meta">Agosto 2026 · Tecnología aplicada · Lectura de 5 minutos</p>
+
+  <h2>1. ¿Qué está cambiando?</h2>
+  <p>La inteligencia artificial dejó de ser una discusión reservada a equipos técnicos. Cada vez más organizaciones están probando asistentes, automatizaciones y herramientas generativas en tareas cotidianas.</p>
+
+  <h2>2. ¿Por qué importa?</h2>
+  <p>Porque incorporar IA sin revisar antes procesos, datos y responsabilidades puede acelerar exactamente aquello que ya funciona mal.</p>
+
+  <div class="signal">
+    <strong>Señal ANDAMIO</strong>
+    <p>Si un proceso es confuso, tiene excepciones constantes o nadie puede explicar quién decide qué, automatizarlo no resuelve el problema de fondo.</p>
+  </div>
+
+  <h2>3. ¿Qué señales mirar?</h2>
+  <p>Hay mejores condiciones para aplicar IA cuando existe una tarea repetitiva, información suficientemente estructurada, un resultado verificable y responsables claros sobre el proceso.</p>
+
+  <h2>4. ¿Qué están haciendo las organizaciones más maduras?</h2>
+  <p>Empiezan por casos de uso concretos, prueban en pequeño, miden resultados y mantienen intervención humana en decisiones ambiguas, sensibles o con múltiples intereses en juego.</p>
+
+  <h2>5. ¿Qué hacer ahora?</h2>
+  <div class="signal">
+    <p><strong>Antes de elegir una herramienta, preguntá:</strong></p>
+    <p>¿Qué problema queremos resolver? ¿Qué parte del proceso consume tiempo sin agregar valor? ¿Qué datos tenemos? ¿Cómo vamos a verificar el resultado? ¿Qué decisión debe seguir siendo humana?</p>
+  </div>
+
+  <h2>La idea para llevarse</h2>
+  <p class="serif" style="font-size:1.7rem;color:var(--forest)">La transformación digital no empieza por la herramienta. Empieza por entender qué queremos mejorar.</p>
+</div>
+</section>
+
+<section id="contacto" class="contact">
+<div class="wrap contact-grid">
+  <div>
+    <span class="eyebrow" style="color:var(--sage)">Hablemos</span>
+    <h2>¿Hay algo que necesitás hacer que hoy no está sucediendo?</h2>
+    <p class="lead">Contanos el desafío. Podemos ayudarte a ordenarlo, articular capacidades y convertirlo en una hoja de ruta ejecutable.</p>
+    <div class="contact-list">
+      <a href="mailto:andamioarg@gmail.com">andamioarg@gmail.com</a>
+      <a href="https://www.linkedin.com/company/andamioarg" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.instagram.com/somosandamio?igsh=bW5zbTZieWUxZWI2" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+  <form onsubmit="handleContactSubmit(event)">
+    <input type="text" name="nombre" placeholder="Nombre y apellido" required>
+    <input type="email" name="email" placeholder="Correo electrónico" required>
+    <select name="tipo" required>
+      <option value="">Tipo de organización</option>
+      <option>Gobierno u organismo público</option>
+      <option>Empresa</option>
+      <option>Organización social o académica</option>
+      <option>Organismo internacional</option>
+    </select>
+    <input type="text" name="organizacion" placeholder="Organización">
+    <textarea name="mensaje" placeholder="¿Qué desafío necesitás resolver?"></textarea>
+    <button type="submit">Conversemos</button>
+  </form>
+</div>
+</section>
+
+<div class="mail-choice-overlay" id="mailChoiceOverlay" hidden>
+  <div class="mail-choice-box">
+    <button type="button" class="mail-choice-close" id="mailChoiceClose" aria-label="Cerrar">&times;</button>
+    <p>¿Cómo querés enviarnos tu mensaje?</p>
+    <a class="btn primary" id="mailChoiceApp" href="#">Abrir mi app de correo</a>
+    <a class="btn" id="mailChoiceGmail" href="#" target="_blank" rel="noopener">Abrir Gmail</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+<div class="wrap" style="display:flex;justify-content:center;gap:20px">
+  <span>© 2026 ANDAMIO</span>
+</div>
+</footer>
+
+<script>
+function calcular(){
+  let total=0;
+  for(let i=1;i<=5;i++){
+    const r=document.querySelector('input[name="q'+i+'"]:checked');
+    if(!r){
+      document.getElementById('score').innerHTML='Te falta responder alguna pregunta.';
+      return;
+    }
+    total += Number(r.value);
+  }
+  let title='', text='';
+  if(total<=3){
+    title='Capacidad de acción frágil';
+    text='Hay señales de dispersión entre prioridades, actores, procesos y herramientas. El primer paso no es acelerar: es ordenar.';
+  }else if(total<=7){
+    title='Capacidad en construcción';
+    text='Hay bases valiosas, pero todavía existen cuellos de botella que dificultan convertir estrategia en ejecución sostenida.';
+  }else{
+    title='Capacidad consolidada';
+    text='La organización muestra buenas condiciones para ejecutar. El desafío pasa por sostener, escalar y mejorar continuamente.';
+  }
+  document.getElementById('score').innerHTML='<strong>'+total+'/10 — '+title+'</strong><br>'+text;
+}
+
+function handleContactSubmit(event){
+  event.preventDefault();
+  var data=new FormData(event.target);
+  var subject=encodeURIComponent('Consulta desde andamio.com.ar');
+  var body=encodeURIComponent(
+    'Nombre: '+data.get('nombre')+'\n'+
+    'Correo: '+data.get('email')+'\n'+
+    'Tipo de organización: '+data.get('tipo')+'\n'+
+    'Organización: '+data.get('organizacion')+'\n\n'+
+    data.get('mensaje')
+  );
+  document.getElementById('mailChoiceApp').href='mailto:andamioarg@gmail.com?subject='+subject+'&body='+body;
+  document.getElementById('mailChoiceGmail').href='https://mail.google.com/mail/?view=cm&fs=1&to=andamioarg@gmail.com&su='+subject+'&body='+body;
+  document.getElementById('mailChoiceOverlay').hidden=false;
+}
+(function(){
+  var overlay=document.getElementById('mailChoiceOverlay');
+  function closeMailChoice(){ overlay.hidden=true; }
+  document.getElementById('mailChoiceClose').addEventListener('click',closeMailChoice);
+  overlay.addEventListener('click',function(e){ if(e.target===overlay) closeMailChoice(); });
+  overlay.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',closeMailChoice); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !overlay.hidden) closeMailChoice(); });
+})();
+(function(){
+  var header=document.getElementById('topheader');
+  function onScroll(){ header.classList.toggle('scrolled', window.scrollY>10); }
+  window.addEventListener('scroll',onScroll);
+  onScroll();
+})();
+</script>
+
+</body>
+</html>
