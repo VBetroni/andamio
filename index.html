@@ -161,6 +161,10 @@ nav{height:72px;display:flex;align-items:center;justify-content:space-between}
 .slide .desc{color:var(--muted);margin-top:10px;flex:1}
 
 
+/* Contenido de cada sección: aparece todo junto con una leve subida y fundido */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .8s ease var(--d,0s),transform .8s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+
 /* Contacto */
 .contact-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:64px;align-items:start}
 .contact h2{margin-bottom:22px}
@@ -601,6 +605,27 @@ if(reduce){ var f=document.getElementById('flow'); if(f&&f.pauseAnimations) f.pa
   ov.addEventListener('click',function(e){if(e.target===ov)close();});
   ov.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){ov.hidden=true;});});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!ov.hidden)close();});
+})();
+
+/* Contenido de las secciones: aparece con una leve transición al entrar en pantalla (una vez) */
+(function(){
+  if(reduce||!('IntersectionObserver' in window))return;
+  var groups=[
+    ['.intro .lead,.intro .hero-actions',.5,.12],
+    ['.statement-grid > div:nth-child(2)',0,0],
+    ['#que-hacemos .lead',0,0],['#que-hacemos .card',0,.12],
+    ['#metodo .lead',0,0],['#metodo .step',0,.1],
+    ['#soluciones .lead',0,0],['#soluciones .sol-group',0,0],
+    ['#contacto .contact-grid > div > .lead,#contacto .contact-list',0,.1],['#contacto form',.1,0]
+  ];
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);} });
+  },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  groups.forEach(function(g){
+    document.querySelectorAll(g[0]).forEach(function(el,i){
+      el.classList.add('rv'); el.style.setProperty('--d',(g[1]+i*g[2]).toFixed(2)+'s'); io.observe(el);
+    });
+  });
 })();
 
 /* Menú hamburguesa (celular y tablet): se cierra con Esc, al elegir una sección o al tocar afuera */
