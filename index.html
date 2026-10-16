@@ -728,45 +728,6 @@ if(reduce){ var f=document.getElementById('flow'); if(f&&f.pauseAnimations) f.pa
   update();
 })();
 
-/* Scroll snap entre secciones, "hacia adelante".
-   El scroll-snap nativo de CSS se traba con la rueda en pasos chicos y con las secciones más altas que la pantalla
-   (Soluciones), así que el ajuste se hace acá: cuando el scroll se detiene y el inicio de la sección que viene en la
-   dirección del movimiento está cerca, se completa el recorrido hasta ahí. Nunca vuelve hacia atrás, así que no puede
-   trabar. Se desactiva con prefers-reduced-motion y no actúa durante el scroll con teclado. */
-(function(){
-  if(reduce)return;
-  var secs=document.querySelectorAll('main > section'), hasEnd='onscrollend' in window,
-      lastY=window.scrollY, dir=0, timer=0, ownTimer=0, touching=false, own=false, lastKey=0;
-  function anchors(){
-    var max=document.documentElement.scrollHeight-window.innerHeight;
-    return Array.prototype.map.call(secs,function(s){
-      return Math.max(0,Math.min(max,Math.round(s.getBoundingClientRect().top+window.scrollY-72)));
-    });
-  }
-  function settle(){
-    if(own||touching||dir===0||Date.now()-lastKey<1500)return;
-    var y=window.scrollY, T=Math.min(260,Math.round(window.innerHeight*.3)), a=anchors(), t=null, i;
-    if(dir>0){ for(i=0;i<a.length;i++){ if(a[i]>y+2&&a[i]-y<=T){t=a[i];break;} } }
-    else { for(i=a.length-1;i>=0;i--){ if(a[i]<y-2&&y-a[i]<=T){t=a[i];break;} } }
-    if(t===null)return;
-    own=true; window.scrollTo({top:t,behavior:'smooth'});
-    clearTimeout(ownTimer);
-    ownTimer=setTimeout(function(){ own=false; dir=0; lastY=window.scrollY; },800);
-  }
-  function later(){ if(!hasEnd){ clearTimeout(timer); timer=setTimeout(settle,170); } }
-  window.addEventListener('scroll',function(){
-    if(own)return;
-    var y=window.scrollY;
-    if(y!==lastY){ dir=y>lastY?1:-1; lastY=y; }
-    later();
-  },{passive:true});
-  if(hasEnd) window.addEventListener('scrollend',settle);
-  window.addEventListener('touchstart',function(){ touching=true; },{passive:true});
-  window.addEventListener('touchend',function(){ touching=false; later(); },{passive:true});
-  window.addEventListener('touchcancel',function(){ touching=false; later(); },{passive:true});
-  window.addEventListener('keydown',function(){ lastKey=Date.now(); });
-})();
-
 /* Carruseles de soluciones (y selector de etapa en Gobiernos locales) */
 (function(){
   document.querySelectorAll('.sol-group').forEach(function(g){
